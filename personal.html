@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Karthik | INFOFEST Dashboard</title>
+
+  <!-- GOOGLE FONTS -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Ballet:opsz@16..72&family=Bonheur+Royale&family=Eagle+Lake&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Lavishly+Yours&display=swap" rel="stylesheet">
+
+  <!-- PDF -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:"Josefin Sans", sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      background:linear-gradient(135deg,#0f172a,#111827,#1e293b);
+      overflow-x:hidden;
+      color:white;
+    }
+
+    .blur1{
+      position:fixed;
+      width:500px;
+      height:500px;
+      background:#ff005555;
+      border-radius:50%;
+      filter:blur(120px);
+      top:-150px;
+      right:-100px;
+      z-index:0;
+    }
+
+    .blur2{
+      position:fixed;
+      width:450px;
+      height:450px;
+      background:#0099ff44;
+      border-radius:50%;
+      filter:blur(120px);
+      bottom:-100px;
+      left:-100px;
+      z-index:0;
+    }
+
+    .container{
+      position:relative;
+      z-index:2;
+      width:100%;
+      max-width:1400px;
+      margin:auto;
+      padding:30px;
+    }
+
+    /* TOPBAR */
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:30px;
+      flex-wrap:wrap;
+      gap:20px;
+    }
+
+    .logo h1{
+      font-family:"Lavishly Yours", cursive;
+      font-size:85px;
+      font-weight:400;
+      line-height:1;
+    }
+
+    .logo p{
+      margin-top:10px;
+      color:#cbd5e1;
+      font-size:17px;
+    }
+
+    /* SOCIAL */
+
+    .socials{
+      display:flex;
+      gap:15px;
+      flex-wrap:wrap;
+    }
+
+    .social-card{
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.1);
+      backdrop-filter:blur(10px);
+      border-radius:20px;
+      padding:14px 20px;
+    }
+
+    .social-card span{
+      display:block;
+      color:#cbd5e1;
+      margin-bottom:4px;
+      font-size:14px;
+    }
+
+    /* MAIN */
+
+    .main{
+      display:grid;
+      grid-template-columns:400px 1fr;
+      gap:25px;
+    }
+
+    .glass{
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.1);
+      backdrop-filter:blur(12px);
+      border-radius:30px;
+      padding:25px;
+    }
+
+    .glass h2{
+      margin-bottom:20px;
+      font-size:28px;
+    }
+
+    /* INPUTS */
+
+    .input-group{
+      margin-bottom:20px;
+    }
+
+    .input-group label{
+      display:block;
+      margin-bottom:8px;
+      color:#e2e8f0;
+      font-size:15px;
+    }
+
+    .input-group input,
+    .input-group textarea{
+
+      width:100%;
+      border:none;
+      outline:none;
+      padding:16px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.12);
+      color:white;
+      font-size:16px;
+
+    }
+
+    .input-group textarea{
+      resize:none;
+      min-height:140px;
+    }
+
+    /* BUTTONS */
+
+    .btns{
+      display:flex;
+      gap:15px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    button{
+
+      flex:1;
+      min-width:150px;
+      padding:15px;
+
+      border:none;
+      border-radius:18px;
+
+      cursor:pointer;
+
+      font-size:15px;
+      font-weight:600;
+
+      color:white;
+
+    }
+
+    .generate-btn{
+      background:linear-gradient(90deg,#ff004c,#ff4d6d);
+    }
+
+    .download-btn{
+      background:linear-gradient(90deg,#0066ff,#00bfff);
+    }
+
+    /* PREVIEW */
+
+    .preview{
+      background:white;
+      border-radius:25px;
+      overflow:auto;
+      padding:20px;
+    }
+
+    canvas{
+      width:100%;
+      display:block;
+      border-radius:18px;
+    }
+
+    /* FOOTER */
+
+    .footer{
+      text-align:center;
+      margin-top:30px;
+      color:#cbd5e1;
+      font-size:14px;
+    }
+
+    /* MOBILE */
+
+    @media(max-width:1100px){
+
+      .main{
+        grid-template-columns:1fr;
+      }
+
+    }
+
+    @media(max-width:768px){
+
+      .container{
+        padding:20px;
+      }
+
+      .logo h1{
+        font-size:65px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="blur1"></div>
+  <div class="blur2"></div>
+
+  <div class="container">
+
+    <!-- TOP -->
+
+    <div class="topbar">
+
+      <div class="logo">
+        <h1>Karthik</h1>
+        <p>INFOFEST 2026 Certificate Generator Dashboard</p>
+      </div>
+
+      <div class="socials">
+
+        <div class="social-card">
+          <span>Instagram</span>
+          <strong>@karthikr_kkr</strong>
+        </div>
+
+      <a
+        href="https://wa.link/0x2hr5"
+        target="_blank"
+        style="text-decoration:none; color:white;">
+
+      <div class="social-card">
+
+       <span>WhatsApp</span>
+
+       <strong>Chat on WhatsApp</strong>
+
+       </div>
+
+</a>
+
+      </div>
+
+    </div>
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+      <!-- LEFT -->
+
+      <div class="glass">
+
+        <h2>Generate Certificate</h2>
+
+        <div class="input-group">
+
+          <label>Participant Name</label>
+
+          <input
+          type="text"
+          id="nameInput"
+          placeholder="Enter participant name">
+
+        </div>
+
+        <div class="input-group">
+
+          <label>Research Paper Title</label>
+
+          <textarea
+          id="titleInput"
+          placeholder="Enter research paper title"></textarea>
+
+        </div>
+
+        <div class="btns">
+
+          <button
+          class="generate-btn"
+          onclick="generateCertificate()">
+
+          Generate Preview
+
+          </button>
+
+          <button
+          class="download-btn"
+          onclick="downloadPDF()">
+
+          Download PDF
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- RIGHT -->
+
+      <div class="glass">
+
+        <h2>Certificate Preview</h2>
+
+        <div class="preview">
+
+          <canvas
+          id="certificateCanvas"
+          width="1462"
+          height="1037">
+          </canvas>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer">
+      Designed & Developed by Karthik • INFOFEST 2026
+    </div>
+
+  </div>
+
+  <script>
+
+    const canvas =
+    document.getElementById('certificateCanvas');
+
+    const ctx =
+    canvas.getContext('2d');
+
+    const template =
+    new Image();
+
+    /* CERTIFICATE IMAGE NAME */
+
+    template.src =
+    'infofest26 Certificate.png';
+
+    template.onload = () => {
+
+      drawCertificate('', '');
+
+    };
+
+    /* TEXT WRAP */
+
+    function wrapText(
+      context,
+      text,
+      x,
+      y,
+      maxWidth,
+      lineHeight
+    ){
+
+      const words = text.split(' ');
+
+      let line = '';
+      let lines = [];
+
+      for(let n = 0; n < words.length; n++){
+
+        const testLine =
+        line + words[n] + ' ';
+
+        const metrics =
+        context.measureText(testLine);
+
+        const testWidth =
+        metrics.width;
+
+        if(testWidth > maxWidth && n > 0){
+
+          lines.push(line);
+
+          line = words[n] + ' ';
+
+        }else{
+
+          line = testLine;
+
+        }
+
+      }
+
+      lines.push(line);
+
+      for(let i = 0; i < lines.length; i++){
+
+        context.fillText(
+          lines[i],
+          x,
+          y + (i * lineHeight)
+        );
+
+      }
+
+    }
+
+    /* DRAW CERTIFICATE */
+
+    function drawCertificate(name, title){
+
+      ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      ctx.drawImage(
+        template,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      ctx.textAlign = 'center';
+
+      ctx.fillStyle = '#111';
+
+      /* NAME FONT */
+
+      ctx.font =
+      '64px Bonheur Royale';
+
+      ctx.fillText(
+        name,
+        canvas.width / 2,
+        455
+      );
+
+      /* TITLE FONT */
+
+      ctx.font =
+      '39px Bonheur Royale';
+
+      /* TITLE POSITION */
+
+      wrapText(
+        ctx,
+        title,
+        canvas.width / 2,
+        550,
+        850,
+        40
+      );
+
+    }
+
+    /* GENERATE */
+
+    function generateCertificate(){
+
+      const name =
+      document.getElementById(
+        'nameInput'
+      ).value;
+
+      const title =
+      document.getElementById(
+        'titleInput'
+      ).value;
+
+      drawCertificate(
+        name,
+        title
+      );
+
+    }
+
+    /* DOWNLOAD PDF */
+
+    async function downloadPDF(){
+
+      const name =
+      document.getElementById(
+        'nameInput'
+      ).value || 'certificate';
+
+      const { jsPDF } =
+      window.jspdf;
+
+      const pdf =
+      new jsPDF({
+
+        orientation:'landscape',
+
+        unit:'px',
+
+        format:[
+          canvas.width,
+          canvas.height
+        ]
+
+      });
+
+      const imageData =
+      canvas.toDataURL('image/png');
+
+      pdf.addImage(
+        imageData,
+        'PNG',
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      pdf.save(
+        `${name}_certificate.pdf`
+      );
+
+    }
+
+  </script>
+
+</body>
+</html>
